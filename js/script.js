@@ -7,7 +7,7 @@
 
 const CONFIG = {
     webhookMake: "https://hook.eu1.make.com/82m4nzufy8asqm0onzpi7pqay5ifs5aj",
-    numeroWhatsApp: "549111526311635"
+    numeroWhatsApp: "5493447526699"
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,17 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     });
 
-    const manejarClickWhatsApp = (e) => {
-        e.preventDefault();
-        
-        let msj = `¡Hola! Vi su web y me interesó mucho. Mi negocio está creciendo, pero sigo haciendo muchas cosas a mano y pierdo tiempo. ¿Tienen un minuto para hacerles un par de preguntas rápidas por acá?`;
+   const manejarClickWhatsApp = (e) => {
+    e.preventDefault();
+    
+    let msj = `Hola, equipo de INTI AI. Estaba revisando la web y, antes de coordinar el diagnóstico en la agenda, quisiera hacerles una consulta puntual sobre la viabilidad de mi proyecto. ¿Me podrán orientar por este canal?`;
 
-        if (inputs.nombre.value.trim() !== '') {
-            msj = `¡Hola! Soy *${inputs.nombre.value.trim()}*. Vi su web y me interesó mucho. Mi negocio está creciendo, pero sigo haciendo muchas cosas a mano y pierdo tiempo. ¿Tienen un minuto para hacerles un par de preguntas rápidas por acá?`;
-        }
+    if (inputs.nombre.value.trim() !== '') {
+        msj = `Hola, equipo de INTI AI. Soy *${inputs.nombre.value.trim()}*. Estaba revisando la web y, antes de coordinar el diagnóstico en la agenda, quisiera hacerles una consulta puntual sobre la viabilidad de mi proyecto. ¿Me podrán orientar por este canal?`;
+    }
 
-        window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(msj)}`, '_blank');
-    };
+    window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(msj)}`, '_blank');
+};
 
     const floatWa = document.getElementById('btn-whatsapp-float');
     if(floatWa) floatWa.addEventListener('click', manejarClickWhatsApp);
