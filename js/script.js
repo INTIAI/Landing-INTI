@@ -1,140 +1,320 @@
 "use strict";
 
 /**
- * 🚀 INTI AI | MOTOR DE CIBERSEGURIDAD Y CONECTIVIDAD API
- * Arquitectura: Fetch API, Divulgación Progresiva, Lógica Dinámica de Leads y Data Hygiene.
+ * INTI AI | Lógica de la landing
+ * - Formulario en 2 pasos con validación y consentimiento explícito.
+ * - Envío a /api/lead (proxy server-side). El webhook de Make NO vive en el cliente.
+ * - Honeypot anti-bots, atribución UTM y manejo de errores con fallback a WhatsApp.
  */
 
 const CONFIG = {
-    webhookMake: "https://hook.eu1.make.com/82m4nzufy8asqm0onzpi7pqay5ifs5aj",
-    numeroWhatsApp: "5493447526699"
+    endpoint: "/api/lead",
+    numeroWhatsApp: "5493447526699",
+    timeoutMs: 8000
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.info("🛡️ [INTI AI] Motor de Seguridad y Morphing UI Iniciado.");
-
-    const form = document.getElementById('form-auditoria');
-    const errorContainer = document.getElementById('error-message');
-
-    const paso1 = document.getElementById('paso-1');
-    const paso2 = document.getElementById('paso-2');
-    const btnSiguiente = document.getElementById('btn-siguiente');
-    const btnAuditoria = document.getElementById('btn-auditoria');
-    const mensajeExito = document.getElementById('mensaje-exito');
-
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("form-auditoria");
     if (!form) return;
 
+    const errorContainer = document.getElementById("error-message");
+    const paso1 = document.getElementById("paso-1");
+    const paso2 = document.getElementById("paso-2");
+    const btnSiguiente = document.getElementById("btn-siguiente");
+    const btnVolver = document.getElementById("btn-volver");
+    const btnAuditoria = document.getElementById("btn-auditoria");
+    const mensajeExito = document.getElementById("mensaje-exito");
+    const consentimiento = document.getElementById("consentimiento");
+    const honeypot = document.getElementById("empresa_web");
+
+    if (!errorContainer || !paso1 || !paso2 || !btnSiguiente || !btnAuditoria) return;
+
     const inputs = {
-        nombre: document.getElementById('nombre'),
-        email: document.getElementById('email'),
-        negocio: document.getElementById('negocio'),
-        telefono: document.getElementById('telefono'),
-        etapa: document.getElementById('etapa_negocio')
+        nombre: document.getElementById("nombre"),
+        email: document.getElementById("email"),
+        negocio: document.getElementById("negocio"),
+        telefono: document.getElementById("telefono"),
+        etapa: document.getElementById("etapa_negocio")
     };
 
-    inputs.nombre.addEventListener('input', function() {
-        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-\']/g, '');
-    });
-    inputs.negocio.addEventListener('input', function() {
-        this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,&\-]/g, '');
-    });
-    inputs.telefono.addEventListener('input', function() {
-        this.value = this.value.replace(/[^\+0-9\s\-]/g, '');
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const ETAPAS_PERMITIDAS = new Set(["inicial", "crecimiento", "escala"]);
+
+    /* ---------------------------------------------------------------------
+       Sanitización suave en el cliente (la validación real ocurre en el server)
+       --------------------------------------------------------------------- */
+    inputs.nombre.addEventListener("input", function () {
+        this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-'.]/g, "");
     });
 
-    btnSiguiente.addEventListener('click', () => {
-        errorContainer.style.display = 'none';
-        
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const emailValido = emailRegex.test(inputs.email.value.trim());
-        
-        if (inputs.nombre.value.trim().length < 3 || !emailValido) {
-            return mostrarError("Por favor, ingresa un nombre y un correo electrónico válido (ej: nombre@correo.com).");
+    inputs.negocio.addEventListener("input", function () {
+        this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,&+\-/()]/g, "");
+    });
+
+    inputs.telefono.addEventListener("input", function () {
+        this.value = this.value.replace(/[^+0-9\s\-()]/g, "");
+    });
+
+    [inputs.nombre, inputs.email, inputs.negocio, inputs.telefono].forEach((input) => {
+        input.addEventListener("blur", function () {
+            this.value = this.value.trim();
+        });
+    });
+
+    // Al corregir un campo, se retira el estado de error accesible.
+    [inputs.nombre, inputs.email, inputs.negocio, inputs.telefono, inputs.etapa, consentimiento]
+        .filter(Boolean)
+        .forEach((field) => {
+            const clearInvalid = () => field.removeAttribute("aria-invalid");
+            field.addEventListener("input", clearInvalid);
+            field.addEventListener("change", clearInvalid);
+        });
+
+    /* ---------------------------------------------------------------------
+       Mensajes de error accesibles
+       --------------------------------------------------------------------- */
+    const limpiarError = () => {
+        errorContainer.replaceChildren();
+        errorContainer.style.display = "none";
+        form.querySelectorAll('[aria-invalid="true"]').forEach((field) => {
+            field.removeAttribute("aria-invalid");
+        });
+    };
+
+    const mostrarError = (mensaje, opciones = {}) => {
+        errorContainer.replaceChildren();
+
+        const strong = document.createElement("strong");
+        strong.textContent = "⚠️ Error: ";
+        errorContainer.append(strong, document.createTextNode(mensaje));
+
+        if (opciones.whatsapp) {
+            errorContainer.append(document.createTextNode(" "));
+            const link = document.createElement("a");
+            link.href = `https://wa.me/${CONFIG.numeroWhatsApp}`;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "error-link";
+            link.textContent = "Escribinos por WhatsApp";
+            errorContainer.append(link);
         }
 
-        paso1.classList.replace('step-visible', 'step-hidden');
-        
+        errorContainer.style.display = "block";
+
+        if (opciones.focus && typeof opciones.focus.focus === "function") {
+            if (typeof opciones.focus.setAttribute === "function") {
+                opciones.focus.setAttribute("aria-invalid", "true");
+            }
+            opciones.focus.focus({ preventScroll: true });
+        } else {
+            errorContainer.focus({ preventScroll: true });
+        }
+
+        errorContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+
+    /* ---------------------------------------------------------------------
+       Navegación entre pasos
+       --------------------------------------------------------------------- */
+    const avanzarPaso1 = () => {
+        limpiarError();
+
+        const nombre = inputs.nombre.value.trim();
+        const email = inputs.email.value.trim();
+
+        if (nombre.length < 2) {
+            return mostrarError("Ingresá tu nombre (mínimo 2 caracteres).", { focus: inputs.nombre });
+        }
+        if (nombre.length > 50) {
+            return mostrarError("El nombre no puede superar los 50 caracteres.", { focus: inputs.nombre });
+        }
+        if (!EMAIL_RE.test(email) || email.length > 60) {
+            return mostrarError("Ingresá un correo electrónico válido (ej: nombre@correo.com).", { focus: inputs.email });
+        }
+
+        paso1.classList.replace("step-visible", "step-hidden");
         setTimeout(() => {
-            paso2.classList.replace('step-hidden', 'step-visible');
-        }, 300);
-    });
+            paso2.classList.replace("step-hidden", "step-visible");
+            inputs.negocio.focus();
+        }, 250);
+    };
 
-   const manejarClickWhatsApp = (e) => {
-    e.preventDefault();
-    
-    let msj = `Hola, equipo de INTI AI. Estaba revisando la web y, antes de coordinar el diagnóstico en la agenda, quisiera hacerles una consulta puntual sobre la viabilidad de mi proyecto. ¿Me podrán orientar por este canal?`;
+    const volverPaso1 = () => {
+        limpiarError();
+        paso2.classList.replace("step-visible", "step-hidden");
+        paso1.classList.replace("step-hidden", "step-visible");
+        inputs.email.focus();
+    };
 
-    if (inputs.nombre.value.trim() !== '') {
-        msj = `Hola, equipo de INTI AI. Soy *${inputs.nombre.value.trim()}*. Estaba revisando la web y, antes de coordinar el diagnóstico en la agenda, quisiera hacerles una consulta puntual sobre la viabilidad de mi proyecto. ¿Me podrán orientar por este canal?`;
-    }
+    const mostrarExito = () => {
+        paso2.classList.replace("step-visible", "step-hidden");
+        mensajeExito.classList.replace("step-hidden", "step-visible");
+        mensajeExito.focus({ preventScroll: true });
+        mensajeExito.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
 
-    window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(msj)}`, '_blank');
-};
+    /* ---------------------------------------------------------------------
+       Atribución de marketing (UTM + referrer), sin datos personales
+       --------------------------------------------------------------------- */
+    const obtenerAtribucion = () => {
+        const params = new URLSearchParams(window.location.search);
+        const atribucion = {};
 
-    const floatWa = document.getElementById('btn-whatsapp-float');
-    if(floatWa) floatWa.addEventListener('click', manejarClickWhatsApp);
+        ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((key) => {
+            const value = (params.get(key) || "").trim();
+            if (value) atribucion[key] = value.slice(0, 100);
+        });
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault(); 
-        errorContainer.style.display = 'none';
-
-        const digitosTelefono = inputs.telefono.value.replace(/\D/g, '');
-
-        if (!inputs.etapa.value || inputs.negocio.value.trim().length < 2 || digitosTelefono.length < 8 || digitosTelefono.length > 15) {
-            return mostrarError("Por favor, ingresa tu rubro y un número de teléfono válido (ej: +54 9 11...).");
+        if (document.referrer) {
+            atribucion.referrer = document.referrer.slice(0, 300);
         }
+
+        return atribucion;
+    };
+
+    /* ---------------------------------------------------------------------
+       Validación del paso 2
+       --------------------------------------------------------------------- */
+    const validarPaso2 = () => {
+        const negocio = inputs.negocio.value.trim();
+        const telefono = inputs.telefono.value.trim();
+        const digitos = telefono.replace(/\D/g, "");
+
+        if (negocio.length < 2) {
+            mostrarError("Ingresá tu rubro o nicho (mínimo 2 caracteres).", { focus: inputs.negocio });
+            return false;
+        }
+        if (negocio.length > 60) {
+            mostrarError("El rubro no puede superar los 60 caracteres.", { focus: inputs.negocio });
+            return false;
+        }
+        if (digitos.length < 8 || digitos.length > 15) {
+            mostrarError("Ingresá un número de WhatsApp válido (entre 8 y 15 dígitos).", { focus: inputs.telefono });
+            return false;
+        }
+        if (!ETAPAS_PERMITIDAS.has(inputs.etapa.value)) {
+            mostrarError("Seleccioná en qué etapa está tu negocio.", { focus: inputs.etapa });
+            return false;
+        }
+        if (!consentimiento || !consentimiento.checked) {
+            mostrarError("Para enviar la solicitud, aceptá la Política de Privacidad y el tratamiento de tus datos.", { focus: consentimiento });
+            return false;
+        }
+
+        return true;
+    };
+
+    /* ---------------------------------------------------------------------
+       Envío
+       --------------------------------------------------------------------- */
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (paso1.classList.contains("step-visible")) {
+            return avanzarPaso1();
+        }
+
+        limpiarError();
+
+        // Honeypot: un bot completa el campo oculto. Simulamos éxito sin enviar nada.
+        if (honeypot && honeypot.value.trim() !== "") {
+            mostrarExito();
+            return;
+        }
+
+        if (!validarPaso2()) return;
 
         const payload = {
             nombre: inputs.nombre.value.trim(),
-            email: inputs.email.value.trim(),
+            email: inputs.email.value.trim().toLowerCase(),
             negocio: inputs.negocio.value.trim(),
             telefono: inputs.telefono.value.trim(),
             etapa_negocio: inputs.etapa.value,
-            tipo_contacto: 'auditoria',
-            fecha: new Date().toISOString()
+            consentimiento: true,
+            atribucion: obtenerAtribucion()
         };
 
-        const textoOriginal = btnAuditoria.innerHTML;
+        const textoOriginal = btnAuditoria.textContent.trim();
         btnAuditoria.disabled = true;
-        btnAuditoria.innerHTML = `PROCESANDO...`;
+        btnAuditoria.setAttribute("aria-busy", "true");
+        btnAuditoria.textContent = "Enviando...";
+        form.setAttribute("aria-busy", "true");
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.timeoutMs);
 
         try {
-            const response = await fetch(CONFIG.webhookMake, {
+            const response = await fetch(CONFIG.endpoint, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
                 body: JSON.stringify(payload),
-                signal: controller.signal
+                signal: controller.signal,
+                credentials: "same-origin"
             });
 
-            clearTimeout(timeoutId);
+            const data = await response.json().catch(() => null);
 
-            if (!response.ok) throw new Error("Respuesta no satisfactoria");
+            if (response.status === 429) {
+                throw new Error("rate-limit");
+            }
+            if (response.status === 403) {
+                throw new Error("forbidden");
+            }
+            if (!response.ok) {
+                if (response.status === 400 && data?.error === "invalid") {
+                    throw new Error("rejected");
+                }
+                throw new Error("upstream");
+            }
+            if (!data || data.ok !== true) {
+                throw new Error("rejected");
+            }
 
-            console.info(`✅ Lead procesado vía [AUDITORIA] - Data Limpia`);
-
-            paso2.classList.replace('step-visible', 'step-hidden');
-            setTimeout(() => {
-                mensajeExito.classList.replace('step-hidden', 'step-visible');
-            }, 400);
-
+            mostrarExito();
         } catch (error) {
-            clearTimeout(timeoutId);
-            console.warn("⚠️ Error en Webhook. Aplicando Fallback.");
-            
-            let mensajeTexto = `¡Hola INTI AI! 🚀 Intenté agendar mi auditoría pero hubo un error de conexión. Soy *${payload.nombre}*.`;
-            window.open(`https://wa.me/${CONFIG.numeroWhatsApp}?text=${encodeURIComponent(mensajeTexto)}`, '_blank');
-            form.reset();
+            if (error.name === "AbortError") {
+                mostrarError("La conexión tardó demasiado. Revisá tu internet e intentá nuevamente.", { whatsapp: true });
+            } else if (error.message === "rate-limit") {
+                mostrarError("Recibimos varias solicitudes seguidas. Esperá unos segundos e intentá de nuevo.", { whatsapp: true });
+            } else if (error.message === "rejected") {
+                mostrarError("Revisá los datos ingresados e intentá nuevamente.", { focus: inputs.negocio });
+            } else if (error.message === "forbidden") {
+                mostrarError("No pudimos validar el origen de la solicitud. Recargá la página e intentá de nuevo.", { whatsapp: true });
+            } else {
+                mostrarError("No pudimos enviar tu solicitud. Revisá tu conexión e intentá nuevamente.", { whatsapp: true });
+            }
         } finally {
+            clearTimeout(timeoutId);
             btnAuditoria.disabled = false;
-            btnAuditoria.innerHTML = textoOriginal;
+            btnAuditoria.removeAttribute("aria-busy");
+            btnAuditoria.textContent = textoOriginal;
+            form.removeAttribute("aria-busy");
         }
     });
 
-    function mostrarError(mensaje) {
-        errorContainer.innerHTML = `<strong>⚠️ Error:</strong> ${mensaje}`;
-        errorContainer.style.display = 'block';
+    /* ---------------------------------------------------------------------
+       Eventos de navegación
+       --------------------------------------------------------------------- */
+    btnSiguiente.addEventListener("click", avanzarPaso1);
+
+    if (btnVolver) {
+        btnVolver.addEventListener("click", volverPaso1);
     }
+
+    if (consentimiento) {
+        consentimiento.addEventListener("change", () => {
+            if (consentimiento.checked) limpiarError();
+        });
+    }
+
+    // Enter en el paso 1 avanza; en el paso 2 el submit es nativo.
+    form.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && paso1.classList.contains("step-visible")) {
+            event.preventDefault();
+            avanzarPaso1();
+        }
+    });
 });

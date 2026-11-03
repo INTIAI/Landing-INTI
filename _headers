@@ -1,0 +1,39 @@
+# Cloudflare Pages headers
+# El hash SHA-256 corresponde al JSON-LD inline de index.html.
+# Si se modifica ese bloque, hay que recalcularlo y actualizarlo aca y en vercel.json.
+
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com; script-src 'self' 'sha256-wqYE3DVP64GV8YPPQK7M7mf0FiGnx470q2DMsvI0S88='; connect-src 'self'; media-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-XSS-Protection: 0
+  X-Permitted-Cross-Domain-Policies: none
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacidad.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terminos.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/*
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/js/*
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/api/*
+  Cache-Control: no-store

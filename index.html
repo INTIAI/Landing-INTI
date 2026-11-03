@@ -2,205 +2,463 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://*.make.com;">    
-    <title>INTI AI | Ecosistemas Digitales y Automatización</title>
-    <meta name="description" content="Diseñamos ecosistemas web con IA. Automatización y ventas para negocios que buscan escalar sin fricción.">
-    
-    <link rel="preload" href="assets/hero-bg-inti.png" as="image">
+    <title>INTI AI | Automatización con IA y Agentes Autónomos</title>
+    <meta name="description" content="Diseñamos ecosistemas digitales con IA: automatización, agentes autónomos y arquitectura cognitiva para negocios que escalan sin fricción. Auditoría gratuita.">
+    <meta name="keywords" content="INTI AI, automatización IA, agentes autónomos, Make.com, WhatsApp Business API, arquitectura cognitiva, continuidad operativa">
+    <meta name="author" content="INTI AI">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://intiai.online/">
+    <link rel="alternate" hreflang="es-ar" href="https://intiai.online/">
 
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="INTI AI | Ecosistemas Digitales y Automatización">
+    <meta property="og:description" content="Agentes de IA que captan leads y gestionan clientes 24/7. Recuperá tu tiempo. Multiplicá tus ventas.">
+    <meta property="og:image" content="https://intiai.online/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="INTI AI: ecosistemas digitales y automatización con IA">
+    <meta property="og:url" content="https://intiai.online/">
+    <meta property="og:locale" content="es_AR">
+    <meta property="og:site_name" content="INTI AI">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="INTI AI | Ecosistemas Digitales y Automatización">
+    <meta name="twitter:description" content="Agentes de IA que captan leads y gestionan clientes 24/7. Recuperá tu tiempo.">
+    <meta name="twitter:image" content="https://intiai.online/assets/og-image.jpg">
+    <meta name="twitter:image:alt" content="INTI AI: ecosistemas digitales y automatización con IA">
+
+    <!-- Performance: imagen crítica del hero -->
+    <link rel="preload" as="image" href="assets/hero-bg-inti.jpg" fetchpriority="high">
+
+    <!-- Fuentes Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/favicon.png" sizes="32x32">
     <link rel="icon" type="image/png" href="assets/favicon-192.png" sizes="192x192">
+    <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
     <meta name="theme-color" content="#0B0F19">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css?v=20261103d">
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Datos estructurados para buscadores -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://intiai.online/#organization",
+          "name": "INTI AI",
+          "url": "https://intiai.online/",
+          "logo": "https://intiai.online/assets/favicon-192.png",
+          "email": "equipo.intiai@gmail.com",
+          "description": "Agencia de ecosistemas digitales, automatización con IA y agentes autónomos para negocios.",
+          "sameAs": [
+            "https://www.instagram.com/intiai.co/",
+            "https://www.facebook.com/intiai.co",
+            "https://github.com/INTIAI"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://intiai.online/#website",
+          "url": "https://intiai.online/",
+          "name": "INTI AI",
+          "inLanguage": "es-AR",
+          "publisher": { "@id": "https://intiai.online/#organization" }
+        },
+        {
+          "@type": "Service",
+          "name": "Auditoría de automatización con IA",
+          "serviceType": "Automatización de procesos y agentes de IA",
+          "provider": { "@id": "https://intiai.online/#organization" },
+          "areaServed": ["AR", "LATAM"],
+          "description": "Diagnóstico gratuito de procesos, oportunidades de automatización y hoja de ruta para implementar agentes de IA.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "ARS",
+            "description": "Auditoría gratuita de 30 minutos, sin compromiso."
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://intiai.online/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Tengo que cambiar los programas que ya uso?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Nos conectamos a tus planillas, correos, CRM o sistemas de venta actuales para sumarles inteligencia y automatización, sin romper tu forma de trabajar."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto tiempo lleva tener esto funcionando?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Aplicamos metodologías ágiles. Los primeros agentes de calificación y atención automática pueden estar operativos en semanas, no en meses."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Es seguro para los datos de mis clientes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Trabajamos con encriptación en tránsito y reposo, principios de menor privilegio y auditorías de seguridad continuas."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué pasa si falla WhatsApp o se cae Meta?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Si Meta o WhatsApp tienen algún problema, el sistema activa un plan de respaldo: guarda las consultas y te avisa para que no pierdas ningún contacto."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Es muy caro implementar esto en mi negocio?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Adaptamos cada propuesta a lo que realmente necesita tu proyecto hoy, sin costos ocultos ni sorpresas a fin de mes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué incluye la auditoría gratuita?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Una sesión de 30 minutos para entender tu operación, detectar cuellos de botella y definir una hoja de ruta con las automatizaciones de mayor impacto. Sin costo y sin compromiso."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo protegen mis datos?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Los datos se envían por conexión cifrada, se usan solo para contactarte y se eliminan si no avanzás. Podés solicitar acceso, corrección o eliminación escribiendo a equipo.intiai@gmail.com."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Trabajan con negocios de otras provincias o países?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sí. Trabajamos en remoto con negocios de Argentina y Latinoamérica. Las reuniones y la implementación se coordinan online."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
 
+    <a class="skip-link" href="#servicios">Saltar al contenido principal</a>
+
     <div class="main-brand-tagline-container">
-        <img src="assets/favicon-192.png" alt="INTI AI Logo" class="brand-logo" onerror="this.style.display='none'">
+        <img src="assets/logo-inti-96.png" alt="" class="brand-logo" aria-hidden="true" width="36" height="36" fetchpriority="high">
         <p class="hero-tagline">
             <span class="marca-inti-ai">INTI AI</span> 
-            <span class="divider">|</span> 
+            <span class="divider" aria-hidden="true">|</span> 
             <span class="brand-tagline-white">Ecosistemas Digitales y Automatización</span>
         </p>
     </div>
 
-    <header class="hero-section">
-        <div class="hero-overlay"></div>
+    <!-- HERO SECTION -->
+    <header class="hero-section" role="banner">
+        <div class="hero-overlay" aria-hidden="true"></div>
         
         <div class="hero-content">
             <p class="welcome-text">
-                BIENVENIDOS A <span class="marca-inti-ai">INTI AI</span> • TECNOLOGÍA QUE CONECTA • IA QUE <span class="text-cyan">VENDE</span>
+                BIENVENIDOS A <span class="marca-inti-ai">INTI AI</span> · TECNOLOGÍA QUE CONECTA · IA QUE <span class="text-cyan">VENDE</span>
             </p>
             
             <h1>
-                <span class="text-white">Tu negocio </span><span class="text-cyan">no duerme.</span><br>
-                <span class="text-white">Tu web </span><span class="text-cyan">tampoco.</span>
+                <span class="text-white">Tu negocio </span><span class="text-cyan gradient-cyan">no duerme.</span><br>
+                <span class="text-white">Tu web </span><span class="text-cyan gradient-cyan">tampoco.</span>
             </h1>
             
             <p class="hero-subtitle">
                Conectamos las herramientas que ya usas para crear un sistema que atiende, filtra y vende por vos las 24 horas. Tecnología avanzada, explicada de forma simple.
             </p>
             
-            <a href="#auditoria" class="btn-primary" aria-label="Agendar auditoría estratégica gratuita">
-                Agendar tu auditoría IA gratis
-            </a>
+            <div class="hero-cta-group">
+                <a href="#auditoria" class="btn btn-primary" data-cta="hero">
+                    Agendar mi auditoría IA gratis
+                </a>
+            </div>
+            <p class="cta-trust">
+                <span aria-hidden="true">✓</span> Auditoría gratuita
+                <span class="cta-trust-sep" aria-hidden="true">·</span> Sin compromiso
+                <span class="cta-trust-sep" aria-hidden="true">·</span> Respuesta en 24 hs
+            </p>
         </div>
     </header>
 
-   <main class="method-container">
+   <main id="servicios" class="method-container" role="main">
+        <h2 class="section-title">Cómo transformamos tu operación</h2>
         <div class="grid-spaces">
             <section class="space-card" aria-labelledby="attr-title">
                 <div class="icon-glow" aria-hidden="true">
-                    <img src="assets/icono-target.png" alt="Icono Atracción" class="custom-card-icon" onerror="this.style.display='none'">
+                    <img src="assets/icono-target-trim.png" alt="" class="custom-card-icon" aria-hidden="true" width="42" height="42" loading="lazy" decoding="async">
                 </div>
                 <div class="card-text">
-                    <h3 id="attr-title">Diseño que Vende</h3>
-                    <p>Tu web deja de ser un folleto digital y se convierte en tu mejor vendedor, captando clientes desde el primer segundo.</p>
+                    <h3 id="attr-title">Atracción Inteligente</h3>
+                    <p>Tu web deja de ser un folleto y se convierte en tu mejor vendedor: capta leads calificados desde el primer clic.</p>
                 </div>
             </section>
 
             <section class="space-card" aria-labelledby="esencia-title">
                 <div class="icon-glow" aria-hidden="true">
-                    <img src="assets/icono-esencia.png" alt="Icono Rentabilidad" class="custom-card-icon" onerror="this.style.display='none'">
+                    <img src="assets/icono-esencia-trim.png" alt="" class="custom-card-icon" aria-hidden="true" width="42" height="42" loading="lazy" decoding="async">
                 </div>
                 <div class="card-text">
-                    <h3 id="esencia-title">Sistemas que Trabajan Solos</h3>
-                    <p>Automatizamos tareas repetitivas para que tu equipo deje de perder horas a mano y se enfoque en lo importante: cerrar ventas.</p>
+                    <h3 id="esencia-title">Operación Autónoma</h3>
+                    <p>Agentes de IA que califican, responden y agendan por vos. Tu equipo deja de perder horas operativas y cierra ventas.</p>
                 </div>
             </section>
 
             <section class="space-card" aria-labelledby="retencion-title">
                 <div class="icon-glow" aria-hidden="true">
-                    <img src="assets/icono-retencion.png" alt="Icono Retención" class="custom-card-icon" onerror="this.style.display='none'">
+                    <img src="assets/icono-retencion-trim.png" alt="" class="custom-card-icon" aria-hidden="true" width="42" height="42" loading="lazy" decoding="async">
                 </div>
                 <div class="card-text">
                     <h3 id="retencion-title">Seguimiento 24/7</h3>
-                    <p>Capturamos los datos de tus visitantes y hacemos seguimiento inteligente automático para que ninguna oportunidad se enfríe.</p>
+                    <p>Captura y nutre cada oportunidad automáticamente. Ningún lead se enfría, ninguna consulta queda sin respuesta.</p>
                 </div>
             </section>
 
             <section class="space-card" aria-labelledby="crecimiento-title">
                 <div class="icon-glow" aria-hidden="true">
-                    <img src="assets/icono-crecimiento.png" alt="Icono Crecimiento" class="custom-card-icon" onerror="this.style.display='none'">
+                    <img src="assets/icono-crecimiento-trim.png" alt="" class="custom-card-icon" aria-hidden="true" width="42" height="42" loading="lazy" decoding="async">
                 </div>
                 <div class="card-text">
-                    <h3 id="crecimiento-title">Crecimiento sin Estrés</h3>
-                    <p>Tu negocio atiende a cientos de personas al mismo tiempo de forma personalizada, sin necesidad de sumar costos de personal.</p>
+                    <h3 id="crecimiento-title">Escalabilidad Real</h3>
+                    <p>Atendés a cientos de clientes simultáneamente con la misma calidad. Sin sumar costos fijos, sin fricción operativa.</p>
                 </div>
             </section>
         </div>
     </main>
 
-    <section class="tech-stack-container" aria-label="Tecnologías que integramos">
-        <div class="marquee">
+    <section id="tecnologias" class="tech-stack-container" aria-label="Tecnologías que integramos">
+        <div class="marquee" aria-hidden="true">
             <div class="marquee-content">
                 <span class="tech-logo">OpenAI</span>
                 <span class="tech-logo">Make.com</span>
-                <span class="tech-logo">WhatsApp API</span>
+                <span class="tech-logo">WhatsApp Business API</span>
                 <span class="tech-logo">Shopify</span>
                 <span class="tech-logo">WordPress</span>
                 <span class="tech-logo">Gemini</span>
                 <span class="tech-logo">Stripe</span>
-                <span class="tech-logo">Meta</span>
+                <span class="tech-logo">Meta Cloud API</span>
+                <span class="tech-logo">AWS</span>
+                <span class="tech-logo">n8n</span>
+                <span class="tech-logo">Notion</span>
+                <span class="tech-logo">HubSpot</span>
                 
                 <span class="tech-logo">OpenAI</span>
                 <span class="tech-logo">Make.com</span>
-                <span class="tech-logo">WhatsApp API</span>
+                <span class="tech-logo">WhatsApp Business API</span>
                 <span class="tech-logo">Shopify</span>
                 <span class="tech-logo">WordPress</span>
                 <span class="tech-logo">Gemini</span>
                 <span class="tech-logo">Stripe</span>
-                <span class="tech-logo">Meta</span>
+                <span class="tech-logo">Meta Cloud API</span>
+                <span class="tech-logo">AWS</span>
+                <span class="tech-logo">n8n</span>
+                <span class="tech-logo">Notion</span>
+                <span class="tech-logo">HubSpot</span>
             </div>
         </div>
+        <p class="sr-only">Integramos OpenAI,OpenCode,Claude Code, Make.com, WhatsApp Business API, Shopify, WordPress, Gemini, Stripe, Meta Cloud API, AWS, n8n, Notion y HubSpot entre otras...</p>
     </section>
 
-    <section class="showcase-container">
-        <h2 class="section-title" style="text-align: center;">Resultados tangibles. <span class="text-cyan">Cero fricción.</span></h2>
+    <section id="casos" class="showcase-container">
+        <h2 class="section-title">Resultados tangibles. <span class="text-gold">Cero fricción.</span></h2>
         
-        <div class="showcase-card space-card">
+        <div class="showcase-card">
             <div class="showcase-content">
                 <span class="badge">Caso de Éxito: Alvear Home</span>
                 <h3>Transformamos cuellos de botella en ecosistemas autónomos</h3>
-                <p>Implementación de sistema de calificación automatizada y atención ininterrumpida mediante enrutamiento inteligente.</p>
+                <p>Implementación de sistema de calificación automatizada y atención ininterrumpida mediante enrutamiento inteligente con agentes de IA.</p>
                 
                 <div class="metrics-grid">
                     <div class="metric-item">
-                        <span class="metric-number text-cyan">100%</span>
+                        <span class="metric-number">100%</span>
                         <span class="metric-label">Calificación automatizada</span>
                     </div>
                     <div class="metric-item">
-                        <span class="metric-number text-cyan">0</span>
+                        <span class="metric-number">0</span>
                         <span class="metric-label">Leads perdidos</span>
                     </div>
                     <div class="metric-item">
-                        <span class="metric-number text-cyan">24/7</span>
+                        <span class="metric-number">24/7</span>
                         <span class="metric-label">Operación continua</span>
                     </div>
                 </div>
                 
-                <a href="assets/estrategia_alvear_home.pdf" download="Estrategia_INTI_AI_Alvear_Home.pdf" class="btn-download" target="_blank" rel="noopener noreferrer">
+                <a href="assets/estrategia_alvear_home.pdf" download="Estrategia_INTI_AI_Alvear_Home.pdf" class="btn btn-download" target="_blank" rel="noopener noreferrer">
                     Descargar Estrategia (PDF)
+                </a>
+            </div>
+        </div>
+
+        <div class="showcase-card">
+            <div class="showcase-content">
+                <span class="badge">Caso real: Nuni Uñas</span>
+                <h3>Una landing que ordena la consulta antes de que llegue a WhatsApp</h3>
+                <p>Landing mobile-first para manicura semipermanente en Colón, Entre Ríos. Servicios, precios, garantía, galería y un formulario que arma el mensaje de reserva con contexto. Sin backend, sin cookies propias y con auditoría técnica aprobada.</p>
+
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <span class="metric-number">100%</span>
+                        <span class="metric-label">Mobile-first</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-number">12/12</span>
+                        <span class="metric-label">Auditoría aprobada</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-number">0</span>
+                        <span class="metric-label">Backend y cookies</span>
+                    </div>
+                </div>
+
+                <a href="https://nuniunas.pages.dev/" class="btn btn-download" target="_blank" rel="noopener noreferrer">
+                    Ver caso en vivo
                 </a>
             </div>
         </div>
     </section>
 
-    <section class="faq-container">
-        <h2 class="section-title" style="text-align: center; margin-bottom: 30px;">Preguntas Frecuentes</h2>
+    <section id="faq" class="faq-container" aria-labelledby="faq-title">
+        <h2 id="faq-title" class="section-title">Preguntas Frecuentes</h2>
         <div class="faq-list">
             <details class="faq-item">
                 <summary>¿Tengo que cambiar los programas que ya uso?</summary>
-                <p>No. Nos conectamos a tus planillas, correos o sistemas de venta actuales para sumarles inteligencia y automatización, sin romper tu forma de trabajar.</p>
+                <p>No. Nos conectamos a tus planillas, correos, CRM o sistemas de venta actuales para sumarles inteligencia y automatización, sin romper tu forma de trabajar.</p>
             </details>
             <details class="faq-item">
                 <summary>¿Cuánto tiempo lleva tener esto funcionando?</summary>
-                <p>Aplicamos metodologías ágiles. Los primeros sistemas de calificación y atención automática pueden estar operativos en semanas, no en meses.</p>
+                <p>Aplicamos metodologías ágiles. Los primeros agentes de calificación y atención automática pueden estar operativos en semanas, no en meses.</p>
             </details>
             <details class="faq-item">
                 <summary>¿Es seguro para los datos de mis clientes?</summary>
-                <p>Absolutamente. Trabajamos bajo estrictas normas de ciberseguridad y privacidad, asegurando que la información de tu negocio esté siempre encriptada y protegida.</p>
+                <p>Absolutamente. Trabajamos bajo estrictas normas de ciberseguridad y privacidad: encriptación en tránsito y reposo, principios de menor privilegio, y auditorías de seguridad continuas.</p>
+            </details>
+            <details class="faq-item">
+                <summary>¿Qué pasa si falla WhatsApp o se cae Meta?</summary>
+                <p>Tranqui, tu negocio no queda a la deriva. Si Meta o WhatsApp tienen algún problema, nuestro sistema activa un plan de respaldo al instante: guarda las consultas de tus clientes y te avisa para que no pierdas ningún contacto. Tu información siempre está a salvo.</p>
+            </details>
+            <details class="faq-item">
+                <summary>¿Es muy caro implementar esto en mi negocio?</summary>
+                <p>Para nada. Adaptamos cada propuesta a lo que realmente necesita tu proyecto hoy, sin costos raros ni sorpresas a fin de mes. Contanos en qué punto está tu negocio y te armamos una opción a tu medida para que veas si te sirve.</p>
+            </details>
+            <details class="faq-item">
+                <summary>¿Qué incluye la auditoría gratuita?</summary>
+                <p>Una sesión de 30 minutos para entender tu operación, detectar cuellos de botella y definir una hoja de ruta con las automatizaciones de mayor impacto. Sin costo y sin compromiso.</p>
+            </details>
+            <details class="faq-item">
+                <summary>¿Cómo protegen mis datos?</summary>
+                <p>Los datos se envían por conexión cifrada, se usan solo para contactarte y se eliminan si no avanzás. Podés solicitar acceso, corrección o eliminación escribiendo a <a href="mailto:equipo.intiai@gmail.com">equipo.intiai@gmail.com</a>. Ver <a href="privacidad.html">Política de Privacidad</a>.</p>
+            </details>
+            <details class="faq-item">
+                <summary>¿Trabajan con negocios de otras provincias o países?</summary>
+                <p>Sí. Trabajamos en remoto con negocios de Argentina y Latinoamérica. Las reuniones y la implementación se coordinan online.</p>
             </details>
         </div>
     </section>
     
-    <section id="auditoria" class="footer-section">
-        <h2 class="section-title">Recupera tu tiempo. Multiplica tus ventas.</h2>
-        <form id="form-auditoria" class="booking-form" novalidate>
-            <div id="error-message" role="alert" style="color:#ef4444; margin-bottom:10px; display:none;"></div>
-            
+    <section id="auditoria" class="footer-section" aria-labelledby="auditoria-title">
+        <h2 id="auditoria-title" class="section-title">Recuperá tu tiempo. Multiplicá tus ventas.</h2>
+        <p class="section-subtitle">
+            Completá el formulario en 2 pasos y recibí tu diagnóstico de automatización <strong>gratis</strong>.
+        </p>
+        <noscript>
+            <p class="noscript-msg">
+                Para enviar el formulario necesitás activar JavaScript. También podés escribirnos por
+                <a href="https://wa.me/5493447526699" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                o a <a href="mailto:equipo.intiai@gmail.com">equipo.intiai@gmail.com</a>.
+            </p>
+        </noscript>
+
+        <form id="form-auditoria" class="form-container" aria-labelledby="auditoria-title" novalidate>
+            <div id="error-message" class="error-banner" role="alert" aria-live="assertive" aria-atomic="true" tabindex="-1"></div>
+
+            <!-- PASO 1 -->
             <div id="paso-1" class="step-container step-visible">
-                <input type="text" id="nombre" name="nombre" placeholder="Nombre Completo" autocomplete="name" maxlength="40" required>
-                <input type="email" id="email" name="email" placeholder="Correo Electrónico" autocomplete="email" maxlength="80" required>
-                
-                <button type="button" id="btn-siguiente" class="btn-primary" style="margin-bottom: 15px; width: 100%;">
-                    Siguiente Paso 👉
+                <label class="sr-only" for="nombre">Nombre y apellido</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name" autocapitalize="words" maxlength="50" required aria-required="true" class="custom-input">
+
+                <label class="sr-only" for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Tu correo electrónico" autocomplete="email" inputmode="email" maxlength="60" required aria-required="true" class="custom-input">
+
+                <button type="button" id="btn-siguiente" class="btn btn-primary btn-step" data-cta="form-step-1">
+                    Siguiente paso
                 </button>
             </div>
 
+            <!-- PASO 2 -->
             <div id="paso-2" class="step-container step-hidden">
-                <input type="text" id="negocio" name="negocio" placeholder="Nicho" autocomplete="organization" maxlength="60" required>
-                <input type="tel" id="telefono" name="telefono" placeholder="WhatsApp (Ej: +54 9...)" autocomplete="tel" maxlength="20" required>
-                
-                <select id="etapa_negocio" name="etapa_negocio" required class="custom-select">
+                <label class="sr-only" for="negocio">Nicho o rubro</label>
+                <input type="text" id="negocio" name="negocio" placeholder="Nicho / rubro" autocomplete="organization" maxlength="60" required aria-required="true" class="custom-input">
+
+                <label class="sr-only" for="telefono">Número de WhatsApp</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="WhatsApp (ej: +54 9 3447...)" autocomplete="tel" inputmode="tel" maxlength="20" required aria-required="true" class="custom-input">
+
+                <label class="sr-only" for="etapa_negocio">Etapa del negocio</label>
+                <select id="etapa_negocio" name="etapa_negocio" required class="custom-select" aria-required="true">
                     <option value="" disabled selected>¿En qué etapa está tu negocio?</option>
                     <option value="inicial">Emprendedor (1 persona)</option>
                     <option value="crecimiento">Crecimiento (2 a 5 personas)</option>
                     <option value="escala">Escalando (Más de 6 personas)</option>
                 </select>
 
-                <button type="submit" id="btn-auditoria" data-tipo="auditoria" class="btn-primary" style="margin-bottom: 15px; width: 100%;">
-                    📅 Solicitar Auditoría
+                <!-- Honeypot anti-bots: invisible para personas -->
+                <div class="hp-field" aria-hidden="true">
+                    <label for="empresa_web">No completar este campo</label>
+                    <input type="text" id="empresa_web" name="empresa_web" tabindex="-1" autocomplete="off">
+                </div>
+
+                <label class="consent-label" for="consentimiento">
+                    <input type="checkbox" id="consentimiento" name="consentimiento" value="si" required aria-required="true">
+                    <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de Privacidad</a> y el tratamiento de mis datos para recibir el diagnóstico.</span>
+                </label>
+
+                <button type="submit" id="btn-auditoria" class="btn btn-primary btn-step" data-cta="form-submit">
+                    Agendar mi auditoría gratis
+                </button>
+
+                <button type="button" id="btn-volver" class="btn-link">
+                    ← Volver al paso anterior
                 </button>
             </div>
 
-            <div id="mensaje-exito" class="step-container step-hidden success-box">
-                🚀 ¡Solicitud recibida! Estamos evaluando tu perfil. Revisa tu correo en los próximos minutos.
+            <!-- MENSAJE DE ÉXITO -->
+            <div id="mensaje-exito" class="step-container step-hidden success-box" role="status" aria-live="polite" tabindex="-1">
+                <h3 class="success-title">✓ ¡Solicitud recibida!</h3>
+                <p class="success-desc">
+                    Muchas gracias por confiar en nosotros. Ya nos llegó toda la info y <strong>nuestro equipo técnico se pondrá en contacto con vos a la brevedad</strong> para dar el siguiente paso juntos. ¡Hablamos pronto! 🚀
+                </p>
             </div>
+
+            <p class="form-privacy" id="form-privacy">
+                Tus datos se usan solo para contactarte. No compartimos tu información con terceros con fines publicitarios.
+                Ver <a href="privacidad.html">Política de Privacidad</a>.
+            </p>
         </form>
     </section>
 
@@ -208,14 +466,14 @@
         <div class="footer-content-centered">
             
             <div class="footer-logo">
-                <img src="assets/favicon-192.png" alt="INTI AI Logo" class="brand-logo" onerror="this.style.display='none'">
+                <img src="assets/logo-inti-96.png" alt="INTI AI" class="brand-logo" width="40" height="40" loading="lazy" decoding="async">
                 <span class="marca-inti-ai">INTI AI</span>
             </div>
             
-            <p class="footer-description">Sistemas de IA e ingeniería de software para empresas que exigen escalabilidad, automatización y resultados medibles.</p>
+            <p class="footer-description">Desarrollo web y automatizaciones con IA diseñados para optimizar la atención, calificar clientes y escalar tu negocio.</p>
             
             <div class="footer-contact-block">
-                <h4 class="footer-contact-title">CONTACTO Y REDES</h4>
+                <h3 class="footer-contact-title">CONTACTO Y REDES</h3>
                 
                 <div class="contact-items-wrapper">
                     <!-- Email -->
@@ -268,12 +526,13 @@
         </div>
     </footer>
 
-   <a href="https://wa.me/5493447526699?text=%C2%A1Hola%21%20Vi%20su%20web%20y%20me%20interes%C3%B3%20mucho.%20Mi%20negocio%20est%C3%A1%20creciendo%2C%20pero%20sigo%20haciendo%20muchas%20cosas%20a%20mano%20y%20pierdo%20tiempo.%20%C2%BFTienen%20un%20minuto%20para%20hacerles%20un%20par%20de%20preguntas%20r%C3%A1pidas%20por%20ac%C3%A1%3F" class="whatsapp-float" id="btn-whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar directamente por WhatsApp">
+    <a href="https://wa.me/5493447526699?text=%C2%A1Hola%21%20Vi%20su%20web%20y%20me%20interes%C3%B3%20mucho.%20Mi%20negocio%20est%C3%A1%20creciendo%2C%20pero%20sigo%20haciendo%20muchas%20cosas%20a%20mano%20y%20pierdo%20tiempo.%20%C2%BFTienen%20un%20minuto%20para%20hacerles%20un%20par%20de%20preguntas%20r%C3%A1pidas%20por%20ac%C3%A1%3F" class="whatsapp-float" id="btn-whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar directamente por WhatsApp">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
             <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
         </svg>
     </a>
-    
-    <script src="js/script.js" defer></script>
+
+
+    <script src="js/script.js?v=20261103c" defer></script>
 </body>
 </html>

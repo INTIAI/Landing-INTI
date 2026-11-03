@@ -1,0 +1,25 @@
+# Archivos que no deben subirse como assets estáticos a Cloudflare Pages.
+.git
+.gitignore
+node_modules
+.wrangler
+.vercel
+/dist
+/scripts
+/tests
+/package.json
+/package-lock.json
+/wrangler.toml
+/api
+*.md
+*.ps1
+/css/style.css.bak
+/COPY_PUBLICACION_INTIAI.md
+/publicacion-intiai.html
+/assets/hero-bg-inti.png
+/assets/icono-esencia.png
+/assets/icono-retencion.png
+/assets/icono-crecimiento.png
+/assets/icono-target.png
+/assets/Sin fondo*
+/assets/estrategia_alvear_home.pdf
