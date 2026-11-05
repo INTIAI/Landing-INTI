@@ -22,7 +22,8 @@ INTI AI convierte ese cuello de botella en un sistema que atiende, filtra y entr
 
 - **Formulario de 2 pasos** diseñado para reducir el abandono: nombre y email primero, contexto después.
 - **Proxy server-side** (`/api/lead`) que valida, sanitiza y reenvía cada lead a la automatización — el destino nunca queda expuesto en el navegador.
-- **Pipeline de automatización** con Make.com que deposita cada lead, con su atribución de marketing, en una hoja de cálculo operativa.
+- **Pipeline de automatización** con Make.com que registra cada lead, con su atribución de marketing, en una hoja de cálculo operativa.
+- **Auto-respuesta inmediata por correo**: el lead recibe en segundos un email personalizado (nombre y negocio incluidos) que confirma la auditoría, marca expectativas claras y lo prepara para el primer contacto — cero espera, cero silencio.
 
 ## Arquitectura (lo que hay bajo el capó)
 
@@ -35,8 +36,8 @@ Cloudflare Pages Function
    ▼
 Webhook de Make.com  (variable de entorno, jamás en el cliente)
    │
-   ▼
-Google Sheets (central de leads)
+   ├──► Google Sheets (central de leads + atribución)
+   └──► Gmail (auto-respuesta personalizada al lead)
 ```
 
 ### Decisiones de seguridad en capas
@@ -59,6 +60,7 @@ La base de datos (Google Sheets) **no es accesible desde la web**: solo la autom
 - **33 tests automatizados** (validación, seguridad, rate limit, adaptador Cloudflare, assets, SEO).
 - **Lighthouse 100/100** en Accesibilidad, SEO y Best Practices sobre la build de producción.
 - **Sin dependencias de frontend**: HTML5 semántico, CSS3 y JavaScript vanilla (ES6+). Cero frameworks que envejecen.
+- **Operación en frío verificada**: validaciones server-side tanto en cliente como en backend, protección anti-inyección hacia los consumidores de datos (Sheets/CRM) y canal de envío aislado del código público.
 
 ## Stack
 
