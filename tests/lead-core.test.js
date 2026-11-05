@@ -202,7 +202,7 @@ test("processLead envía el lead al webhook con consentimiento y atribución", a
     assert.equal(calls.length, 1);
     assert.equal(calls[0].url, baseEnv.MAKE_WEBHOOK_URL);
     assert.equal(calls[0].init.method, "POST");
-    assert.equal(calls[0].init.redirect, "error");
+    assert.equal(calls[0].init.redirect, "manual");
 
     const payload = JSON.parse(calls[0].init.body);
     assert.equal(payload.nombre, "Ana Pérez");
