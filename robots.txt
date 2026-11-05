@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /functions/
 
-Sitemap: https://intiai.online/sitemap.xml
+Sitemap: https://inti-ai.pages.dev/sitemap.xml

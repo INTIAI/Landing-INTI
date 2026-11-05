@@ -2,7 +2,6 @@
 .gitignore
 node_modules
 .wrangler
-.vercel
 /dist
 /scripts
 /tests

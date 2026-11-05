@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { onRequest } from "../functions/api/lead.js";
-import vercelHandler from "../api/lead.js";
+
+const SITE_ORIGIN = "https://inti-ai.pages.dev";
 
 const validBody = JSON.stringify({
     nombre: "Ana Pérez",
@@ -21,11 +22,11 @@ const env = {
 };
 
 function cloudflareRequest({ method = "POST", body = validBody, ip = "198.51.100.20" } = {}) {
-    return new Request("https://intiai.online/api/lead", {
+    return new Request(`${SITE_ORIGIN}/api/lead`, {
         method,
         headers: {
             "content-type": "application/json",
-            origin: "https://intiai.online",
+            origin: SITE_ORIGIN,
             "user-agent": "adapter-test",
             "CF-Connecting-IP": ip
         },
@@ -66,80 +67,5 @@ test("Cloudflare Function: procesa un lead válido", async () => {
         assert.equal(calls[0].url, env.MAKE_WEBHOOK_URL);
     } finally {
         globalThis.fetch = originalFetch;
-    }
-});
-
-test("Vercel Function: rechaza métodos distintos de POST", async () => {
-    const response = {
-        statusCode: 0,
-        headers: {},
-        body: "",
-        setHeader(key, value) {
-            this.headers[key] = value;
-        },
-        end(body) {
-            this.body = body;
-        }
-    };
-
-    await vercelHandler({ method: "GET", headers: {}, body: undefined }, response);
-
-    assert.equal(response.statusCode, 405);
-    assert.equal(response.headers.Allow, "POST");
-    assert.equal(JSON.parse(response.body).error, "method_not_allowed");
-});
-
-test("Vercel Function: procesa un lead válido", async () => {
-    const originalFetch = globalThis.fetch;
-    const originalWebhook = process.env.MAKE_WEBHOOK_URL;
-    const originalSalt = process.env.RATE_SALT;
-    const calls = [];
-
-    process.env.MAKE_WEBHOOK_URL = env.MAKE_WEBHOOK_URL;
-    process.env.RATE_SALT = env.RATE_SALT;
-
-    globalThis.fetch = async (url, init) => {
-        calls.push({ url, init });
-        return new Response("OK", { status: 200 });
-    };
-
-    const response = {
-        statusCode: 0,
-        headers: {},
-        body: "",
-        setHeader(key, value) {
-            this.headers[key] = value;
-        },
-        end(body) {
-            this.body = body;
-        }
-    };
-
-    try {
-        await vercelHandler(
-            {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json",
-                    origin: "https://intiai.online",
-                    "user-agent": "adapter-test",
-                    "x-forwarded-for": "198.51.100.22, 10.0.0.1"
-                },
-                body: JSON.parse(validBody)
-            },
-            response
-        );
-
-        assert.equal(response.statusCode, 200);
-        assert.deepEqual(JSON.parse(response.body), { ok: true });
-        assert.equal(calls.length, 1);
-        assert.equal(calls[0].url, env.MAKE_WEBHOOK_URL);
-        assert.equal(response.headers["Cache-Control"], "no-store");
-    } finally {
-        globalThis.fetch = originalFetch;
-        if (originalWebhook === undefined) delete process.env.MAKE_WEBHOOK_URL;
-        else process.env.MAKE_WEBHOOK_URL = originalWebhook;
-        if (originalSalt === undefined) delete process.env.RATE_SALT;
-        else process.env.RATE_SALT = originalSalt;
     }
 });

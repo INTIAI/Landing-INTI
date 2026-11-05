@@ -6,7 +6,7 @@
   "description": "Landing de INTI AI con proxy server-side para leads.",
   "scripts": {
     "test": "node --test tests/lead-core.test.js tests/static.test.js tests/adapters.test.js",
-    "check": "node --check js/script.js && node --check lib/lead-core.js && node --check functions/api/lead.js && node --check api/lead.js",
+    "check": "node --check js/script.js && node --check lib/lead-core.js && node --check functions/api/lead.js",
     "build:pages": "node scripts/build-pages.mjs",
     "dev": "npm run build:pages && npx --yes wrangler@4.156.2 pages dev dist --port 8788",
     "deploy": "npm run build:pages && npx --yes wrangler@4.156.2 pages deploy dist --project-name=inti-ai"

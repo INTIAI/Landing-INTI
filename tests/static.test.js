@@ -21,7 +21,6 @@ const script = read("js/script.js");
 const privacy = read("privacidad.html");
 const terms = read("terminos.html");
 const headers = read("_headers");
-const vercel = JSON.parse(read("vercel.json"));
 const jsonLdMatch = index.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
 const jsonLdHash = jsonLdMatch
     ? crypto.createHash("sha256").update(jsonLdMatch[1], "utf8").digest("base64")
@@ -39,20 +38,10 @@ test("index.html contiene un único JSON-LD válido y su hash está en las CSP",
 
     const expected = `sha256-${jsonLdHash}`;
     assert.ok(headers.includes(expected), "El hash del JSON-LD no está en _headers.");
-    assert.ok(
-        vercel.headers[0].headers.some(
-            (header) =>
-                header.key === "Content-Security-Policy" &&
-                header.value.includes(expected)
-        ),
-        "El hash del JSON-LD no está en vercel.json."
-    );
 });
 
 test("las CSP no permiten scripts inline genéricos ni eval", () => {
-    const csp = vercel.headers[0].headers.find(
-        (header) => header.key === "Content-Security-Policy"
-    ).value;
+    const csp = headers.match(/Content-Security-Policy: ([^\n]+)/)?.[1] || "";
 
     assert.match(csp, /script-src 'self' 'sha256-/);
     assert.doesNotMatch(csp, /unsafe-inline/);
@@ -146,9 +135,9 @@ test("robots.txt, sitemap.xml y configuración de Cloudflare existen", () => {
     const packageJson = JSON.parse(read("package.json"));
     const wrangler = read("wrangler.toml");
 
-    assert.match(robots, /Sitemap: https:\/\/intiai\.online\/sitemap\.xml/);
+    assert.match(robots, /Sitemap: https:\/\/inti-ai\.pages\.dev\/sitemap\.xml/);
     assert.match(robots, /Disallow: \/api\//);
-    assert.match(sitemap, /<loc>https:\/\/intiai\.online\/<\/loc>/);
+    assert.match(sitemap, /<loc>https:\/\/inti-ai\.pages\.dev\/<\/loc>/);
     assert.match(sitemap, /privacidad\.html/);
     assert.match(sitemap, /terminos\.html/);
     assert.equal(packageJson.type, "module");
@@ -156,16 +145,17 @@ test("robots.txt, sitemap.xml y configuración de Cloudflare existen", () => {
     assert.match(wrangler, /pages_build_output_dir = "dist"/);
     assert.match(packageJson.scripts["build:pages"], /build-pages\.mjs/);
     assert.ok(exists("functions/api/lead.js"));
-    assert.ok(exists("api/lead.js"));
     assert.ok(exists("lib/lead-core.js"));
     assert.ok(exists("scripts/build-pages.mjs"));
+    assert.ok(!exists("vercel.json"), "El stack de Vercel debe estar eliminado.");
+    assert.ok(!exists("api/lead.js"), "El adaptador de Vercel debe estar eliminado.");
     assert.ok(exists(".assetsignore"));
     assert.match(read(".assetsignore"), /estrategia_alvear_home\.pdf/);
 });
 
 test("el sitio declara canonical, Open Graph y preload del hero", () => {
-    assert.match(index, /<link rel="canonical" href="https:\/\/intiai\.online\/">/);
-    assert.match(index, /property="og:image" content="https:\/\/intiai\.online\/assets\/og-image\.jpg"/);
+    assert.match(index, /<link rel="canonical" href="https:\/\/inti-ai\.pages\.dev\/">/);
+    assert.match(index, /property="og:image" content="https:\/\/inti-ai\.pages\.dev\/assets\/og-image\.jpg"/);
     assert.match(index, /<link rel="preload" as="image" href="assets\/hero-bg-inti\.jpg"/);
     assert.match(index, /assets\/og-image\.jpg/);
 });
