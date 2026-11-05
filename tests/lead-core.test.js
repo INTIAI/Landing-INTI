@@ -218,6 +218,18 @@ test("processLead envía el lead al webhook con consentimiento y atribución", a
     assert.equal(JSON.stringify(payload).includes("203.0.113.10"), false);
 });
 
+test("processLead adjunta el token compartido del webhook al payload", async () => {
+    const { fetchImpl, calls } = makeFetch();
+    const env = { ...baseEnv, MAKE_WEBHOOK_TOKEN: "secret-token-123" };
+
+    await runLead({ fetchImpl, env });
+
+    assert.equal(calls.length, 1);
+    const payload = JSON.parse(calls[0].init.body);
+    assert.equal(payload.webhook_token, "secret-token-123");
+    assert.equal(JSON.stringify(payload).includes("203.0.113.10"), false);
+});
+
 test("processLead no reenvía nada si se completa el honeypot", async () => {
     const { fetchImpl, calls } = makeFetch();
     const result = await runLead({
