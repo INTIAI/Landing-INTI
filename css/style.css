@@ -732,9 +732,7 @@ a:hover { color: var(--color-acento-inti); }
     margin-bottom: var(--space-xl);
 }
 
-/* ==========================================
-   📋 SECCIÓN FORMULARIO
-   ========================================== */
+/* Formulario */
 .form-container {
     max-width: 420px !important; 
     width: 100% !important;
@@ -794,7 +792,6 @@ a:hover { color: var(--color-acento-inti); }
     box-sizing: border-box !important;
 }
 
-/* 🛡️ Estilos reforzados y estrictos para inputs / selects */
 .form-container .custom-input,
 .form-container input,
 .custom-select { 
@@ -841,7 +838,6 @@ a:hover { color: var(--color-acento-inti); }
     color: var(--color-text-primary) !important; 
 }
 
-/* 🛡️ Botones del formulario con idénticas dimensiones, ancho máximo y centrado */
 .form-container .btn,
 .step-visible .btn-primary,
 #btn-siguiente,

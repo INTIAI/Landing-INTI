@@ -1,43 +1,84 @@
-# 🚀 INTI AI | Automatización Cognitiva & Arquitectura de Conversión
+# INTI AI | Ecosistema de Captura y Cualificación de Leads con IA
 
-[![Estado: En Producción](https://img.shields.io/badge/Estado-En%20Producción-success)](#) [![Arquitectura: MVP](https://img.shields.io/badge/Arquitectura-MVP%20Zero--Cost-blue)](#)
+> **Tu negocio no duerme. Tu web tampoco.**
 
-## 📌 Resumen Ejecutivo
-**INTI AI** no es solo una landing page; es un ecosistema digital diseñado para demostrar la integración fluida entre desarrollo frontend, automatización de procesos de negocio (BPA) y neuroventas. 
-
-El objetivo de este proyecto es resolver uno de los mayores cuellos de botella en las ventas digitales: **la fricción en la captura y cualificación de leads.** Mediante un diseño centrado en el usuario y una arquitectura de enrutamiento inteligente (Smart Routing), el sistema captura la intención del cliente, sanitiza los datos y activa flujos asíncronos sin intervención humana.
+[![Estado](https://img.shields.io/badge/Estado-En%20Producci%C3%B3n-success)](https://intiai.pages.dev/) [![Tests](https://img.shields.io/badge/Tests-33%2F33%20passing-brightgreen)](#) [![Lighthouse](https://img.shields.io/badge/Lighthouse-100%2F100%20a11y%20%C2%B7%20SEO%20%C2%B7%20BP-success)](#)
 
 ---
 
-## 🧠 Decisiones Arquitectónicas & Ciberseguridad (Lo que hay bajo el capó)
+## El problema que resuelve
 
-Este MVP fue construido priorizando la escalabilidad, la protección de datos y la resiliencia operativa.
+Cada consulta que queda sin responder es una venta que se va con la competencia. La mayoría de las pymes pierde leads por tres fricciones concretas:
 
-* **Enrutamiento Bidireccional (Smart Routing):** Implementación de lógica condicional en el frontend que clasifica la intención del usuario en tiempo real. Divide el tráfico hacia flujos de alta fricción/alto valor (Agendamiento vía Google Calendar API) o baja fricción/respuesta inmediata (API de WhatsApp).
-* **Motor de Resiliencia (Timeout & Fallback Protocol):** Desarrollo de un controlador de aborto (`AbortController`) que monitorea la latencia del Webhook. Si el servidor (Make.com) no responde en 5 segundos, el sistema interrumpe el ciclo de espera y ejecuta un protocolo de contingencia (Fallback) que redirige al usuario con sus datos pre-cargados a WhatsApp, asegurando un **0% de pérdida de prospectos** ante caídas de red.
-* **Sanitización de Inputs en Tiempo Real:** Filtros Regex aplicados directamente en el DOM para prevenir inyecciones maliciosas de código (XSS) y asegurar la integridad de la base de datos antes de que el payload JSON sea enviado al servidor.
+1. **Nadie responde fuera de horario** — el comprador decide en minutos, no en días.
+2. **Los formularios tradicionales piden demasiado y protegen poco** — abandono y spam.
+3. **Los datos llegan sucios al CRM** — horas perdidas en corrección manual.
 
----
-
-## 💼 Impacto de Negocio (Business ROI)
-Como desarrolladora, mi enfoque es construir tecnología que mueva la aguja comercial:
-1.  **Fricción Cero:** Reducción del ciclo de agendamiento de horas a segundos.
-2.  **Operatividad 24/7:** La automatización asume el rol de un SDR (Sales Development Representative), liberando carga operativa del equipo humano.
-3.  **Zero-Cost Infrastructure:** Despliegue serverless altamente eficiente utilizando Vercel, combinando el poder del ecosistema Google y automatización en la nube minimizando costos fijos.
+INTI AI convierte ese cuello de botella en un sistema que atiende, filtra y entrega leads calificados 24/7, sin cambiar los sistemas que el negocio ya usa.
 
 ---
 
-## 🛠️ Stack Tecnológico
-* **Frontend:** HTML5 Semántico, CSS3 (Variables, Flexbox/Grid, Animaciones UI), JavaScript Vanilla (ES6+).
-* **Integración & API:** Fetch API, JSON, manejo de Promesas y Async/Await.
-* **Automatización Backend:** Webhooks (Make.com / Integromat), Google Workspace (Calendar Appointment Scheduling).
-* **Despliegue & CI/CD:** Git, GitHub, Vercel (Edge Network).
+## Qué hace este producto
+
+- **Formulario de 2 pasos** diseñado para reducir el abandono: nombre y email primero, contexto después.
+- **Proxy server-side** (`/api/lead`) que valida, sanitiza y reenvía cada lead a la automatización — el destino nunca queda expuesto en el navegador.
+- **Pipeline de automatización** con Make.com que deposita cada lead, con su atribución de marketing, en una hoja de cálculo operativa.
+
+## Arquitectura (lo que hay bajo el capó)
+
+```text
+Navegador
+   │  POST /api/lead (JSON, misma origen)
+   ▼
+Cloudflare Pages Function
+   │  validación · sanitización · rate limit · honeypot
+   ▼
+Webhook de Make.com  (variable de entorno, jamás en el cliente)
+   │
+   ▼
+Google Sheets (central de leads)
+```
+
+### Decisiones de seguridad en capas
+
+| Capa | Medida | Qué previene |
+|------|--------|--------------|
+| Transporte | CSP sin `unsafe-inline`/`eval`, hash SHA-256 del JSON-LD | XSS e inyección de scripts |
+| Origen | Allowlist estricta de `Origin` | Abuso cross-site del endpoint |
+| Volumen | Rate limit por IP hasheada con sal secreta | Fuerza bruta y flooding |
+| Contenido | Honeypot, límite de 8 KB, `content-type` estricto | Bots y payloads malformados |
+| Datos | Sanitización y normalización server-side | Inyección hacia Sheets/CRM downstream |
+| Secreto | Webhook solo en variables de entorno | Exposición del canal de leads |
+
+La base de datos (Google Sheets) **no es accesible desde la web**: solo la automatización escribe en ella, y únicamente a través del webhook validado.
 
 ---
 
-## 🤝 Conectemos
-Este repositorio es una muestra de cómo traduzco requerimientos comerciales complejos en soluciones de software limpias y resilientes. Si estás buscando talento capaz de unir el código con la estrategia de negocio, me encantaría conversar.
+## Calidad verificable
 
-* **Web en Producción:** [Ver Proyecto en Vivo](https://intiai.pages.dev/)
-* **LinkedIn:** (https://www.linkedin.com/in/vanesalarroza/)
-* **Email:** equipo.intiai@gmail.com
+- **33 tests automatizados** (validación, seguridad, rate limit, adaptador Cloudflare, assets, SEO).
+- **Lighthouse 100/100** en Accesibilidad, SEO y Best Practices sobre la build de producción.
+- **Sin dependencias de frontend**: HTML5 semántico, CSS3 y JavaScript vanilla (ES6+). Cero frameworks que envejecen.
+
+## Stack
+
+- **Frontend:** HTML5 semántico · CSS3 (Grid/Flex/variables) · JavaScript ES6+
+- **Backend:** Cloudflare Pages Functions (Web APIs, zero-dependency core compartido)
+- **Automatización:** Make.com → Google Sheets
+- **Operación:** Git · GitHub · Cloudflare Pages (CI/CD por push)
+
+---
+
+## Cómo lo pensé
+
+Cada decisión parte de una pregunta comercial: *¿esto acerca el lead a la venta o lo aleja?* La tecnología existe para responder eso con datos, no con supuestos. El resultado es una landing que carga rápido, protege cada byte que el usuario entrega y nunca deja un prospecto sin ruta clara hacia el contacto humano.
+
+¿Tu operación tiene el mismo cuello de botella? [Mirá el proyecto en vivo](https://intiai.pages.dev/) y pedí la auditoría gratuita del propio formulario.
+
+---
+
+## Contacto
+
+- **Web en producción:** <https://intiai.pages.dev/>
+- **LinkedIn:** [vanesalarroza](https://www.linkedin.com/in/vanesalarroza/)
+- **Email:** equipo.intiai@gmail.com

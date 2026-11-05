@@ -1,10 +1,8 @@
 "use strict";
 
 /**
- * INTI AI | Lógica de la landing
- * - Formulario en 2 pasos con validación y consentimiento explícito.
- * - Envío a /api/lead (proxy server-side). El webhook de Make NO vive en el cliente.
- * - Honeypot anti-bots, atribución UTM y manejo de errores con fallback a WhatsApp.
+ * Lógica de la landing: formulario en 2 pasos con envío a /api/lead.
+ * El webhook de Make vive server-side y nunca llega al cliente.
  */
 
 const CONFIG = {
@@ -40,9 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     const ETAPAS_PERMITIDAS = new Set(["inicial", "crecimiento", "escala"]);
 
-    /* ---------------------------------------------------------------------
-       Sanitización suave en el cliente (la validación real ocurre en el server)
-       --------------------------------------------------------------------- */
     inputs.nombre.addEventListener("input", function () {
         this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-'.]/g, "");
     });
@@ -61,18 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Al corregir un campo, se retira el estado de error accesible.
     [inputs.nombre, inputs.email, inputs.negocio, inputs.telefono, inputs.etapa, consentimiento]
         .filter(Boolean)
         .forEach((field) => {
-            const clearInvalid = () => field.removeAttribute("aria-invalid");
-            field.addEventListener("input", clearInvalid);
-            field.addEventListener("change", clearInvalid);
+            field.addEventListener("input", () => field.removeAttribute("aria-invalid"));
+            field.addEventListener("change", () => field.removeAttribute("aria-invalid"));
         });
 
-    /* ---------------------------------------------------------------------
-       Mensajes de error accesibles
-       --------------------------------------------------------------------- */
     const limpiarError = () => {
         errorContainer.replaceChildren();
         errorContainer.style.display = "none";
@@ -113,9 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
         errorContainer.scrollIntoView({ behavior: "smooth", block: "center" });
     };
 
-    /* ---------------------------------------------------------------------
-       Navegación entre pasos
-       --------------------------------------------------------------------- */
     const avanzarPaso1 = () => {
         limpiarError();
 
@@ -127,6 +114,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (nombre.length > 50) {
             return mostrarError("El nombre no puede superar los 50 caracteres.", { focus: inputs.nombre });
+        }
+        if (/\d/.test(nombre)) {
+            return mostrarError("El nombre solo puede contener letras y espacios.", { focus: inputs.nombre });
         }
         if (!EMAIL_RE.test(email) || email.length > 60) {
             return mostrarError("Ingresá un correo electrónico válido (ej: nombre@correo.com).", { focus: inputs.email });
@@ -153,9 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mensajeExito.scrollIntoView({ behavior: "smooth", block: "center" });
     };
 
-    /* ---------------------------------------------------------------------
-       Atribución de marketing (UTM + referrer), sin datos personales
-       --------------------------------------------------------------------- */
     const obtenerAtribucion = () => {
         const params = new URLSearchParams(window.location.search);
         const atribucion = {};
@@ -172,9 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return atribucion;
     };
 
-    /* ---------------------------------------------------------------------
-       Validación del paso 2
-       --------------------------------------------------------------------- */
     const validarPaso2 = () => {
         const negocio = inputs.negocio.value.trim();
         const telefono = inputs.telefono.value.trim();
@@ -186,6 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (negocio.length > 60) {
             mostrarError("El rubro no puede superar los 60 caracteres.", { focus: inputs.negocio });
+            return false;
+        }
+        const digitosNegocio = (negocio.match(/\d/g) || []).length;
+        if (digitosNegocio / negocio.length > 0.3) {
+            mostrarError("El rubro debe describir tu actividad con texto, no solo números.", { focus: inputs.negocio });
             return false;
         }
         if (digitos.length < 8 || digitos.length > 15) {
@@ -204,9 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
     };
 
-    /* ---------------------------------------------------------------------
-       Envío
-       --------------------------------------------------------------------- */
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -216,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         limpiarError();
 
-        // Honeypot: un bot completa el campo oculto. Simulamos éxito sin enviar nada.
+        // Honeypot: un bot completa este campo oculto; simulamos éxito sin enviar nada.
         if (honeypot && honeypot.value.trim() !== "") {
             mostrarExito();
             return;
@@ -295,9 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* ---------------------------------------------------------------------
-       Eventos de navegación
-       --------------------------------------------------------------------- */
     btnSiguiente.addEventListener("click", avanzarPaso1);
 
     if (btnVolver) {
@@ -310,7 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Enter en el paso 1 avanza; en el paso 2 el submit es nativo.
     form.addEventListener("keydown", (event) => {
         if (event.key === "Enter" && paso1.classList.contains("step-visible")) {
             event.preventDefault();
