@@ -135,13 +135,13 @@ test("robots.txt, sitemap.xml y configuración de Cloudflare existen", () => {
     const packageJson = JSON.parse(read("package.json"));
     const wrangler = read("wrangler.toml");
 
-    assert.match(robots, /Sitemap: https:\/\/inti-ai\.pages\.dev\/sitemap\.xml/);
+    assert.match(robots, /Sitemap: https:\/\/intiai\.pages\.dev\/sitemap\.xml/);
     assert.match(robots, /Disallow: \/api\//);
-    assert.match(sitemap, /<loc>https:\/\/inti-ai\.pages\.dev\/<\/loc>/);
+    assert.match(sitemap, /<loc>https:\/\/intiai\.pages\.dev\/<\/loc>/);
     assert.match(sitemap, /privacidad\.html/);
     assert.match(sitemap, /terminos\.html/);
     assert.equal(packageJson.type, "module");
-    assert.match(wrangler, /name = "inti-ai"/);
+    assert.match(wrangler, /name = "intiai"/);
     assert.match(wrangler, /pages_build_output_dir = "dist"/);
     assert.match(packageJson.scripts["build:pages"], /build-pages\.mjs/);
     assert.ok(exists("functions/api/lead.js"));
@@ -154,8 +154,8 @@ test("robots.txt, sitemap.xml y configuración de Cloudflare existen", () => {
 });
 
 test("el sitio declara canonical, Open Graph y preload del hero", () => {
-    assert.match(index, /<link rel="canonical" href="https:\/\/inti-ai\.pages\.dev\/">/);
-    assert.match(index, /property="og:image" content="https:\/\/inti-ai\.pages\.dev\/assets\/og-image\.jpg"/);
+    assert.match(index, /<link rel="canonical" href="https:\/\/intiai\.pages\.dev\/">/);
+    assert.match(index, /property="og:image" content="https:\/\/intiai\.pages\.dev\/assets\/og-image\.jpg"/);
     assert.match(index, /<link rel="preload" as="image" href="assets\/hero-bg-inti\.jpg"/);
     assert.match(index, /assets\/og-image\.jpg/);
 });

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 
 import { onRequest } from "../functions/api/lead.js";
 
-const SITE_ORIGIN = "https://inti-ai.pages.dev";
+const SITE_ORIGIN = "https://intiai.pages.dev";
 
 const validBody = JSON.stringify({
     nombre: "Ana Pérez",

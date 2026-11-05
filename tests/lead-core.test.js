@@ -39,7 +39,7 @@ const baseEnv = {
 
 const baseHeaders = {
     "content-type": "application/json",
-    origin: "https://inti-ai.pages.dev",
+    origin: "https://intiai.pages.dev",
     "user-agent": "INTI-AI-Test/1.0"
 };
 
@@ -151,8 +151,8 @@ test("validateLead rechaza campos inválidos", () => {
 });
 
 test("isAllowedOrigin permite el sitio, localhost y rechaza dominios externos", () => {
-    assert.equal(isAllowedOrigin("https://inti-ai.pages.dev", {}), true);
-    assert.equal(isAllowedOrigin("https://abc.inti-ai.pages.dev", {}), true);
+    assert.equal(isAllowedOrigin("https://intiai.pages.dev", {}), true);
+    assert.equal(isAllowedOrigin("https://abc.intiai.pages.dev", {}), true);
     assert.equal(isAllowedOrigin("https://inti.ai", {}), true);
     assert.equal(isAllowedOrigin("https://evil.example", {}), false);
     assert.equal(isAllowedOrigin("", {}), true);
@@ -212,7 +212,7 @@ test("processLead envía el lead al webhook con consentimiento y atribución", a
     assert.equal(payload.consentimiento, true);
     assert.equal(payload.utm_source, "instagram");
     assert.equal(payload.referrer, "https://www.instagram.com/");
-    assert.equal(payload.pagina, "https://inti-ai.pages.dev");
+    assert.equal(payload.pagina, "https://intiai.pages.dev");
     assert.equal(payload.consentimiento_fecha, "2026-11-03T12:00:00.000Z");
     assert.equal(payload.ip_hash.length, 24);
     assert.equal(JSON.stringify(payload).includes("203.0.113.10"), false);

@@ -38,6 +38,6 @@ Como desarrolladora, mi enfoque es construir tecnología que mueva la aguja come
 ## 🤝 Conectemos
 Este repositorio es una muestra de cómo traduzco requerimientos comerciales complejos en soluciones de software limpias y resilientes. Si estás buscando talento capaz de unir el código con la estrategia de negocio, me encantaría conversar.
 
-* **Web en Producción:** [Ver Proyecto en Vivo](https://inti-ai.pages.dev/)
+* **Web en Producción:** [Ver Proyecto en Vivo](https://intiai.pages.dev/)
 * **LinkedIn:** (https://www.linkedin.com/in/vanesalarroza/)
 * **Email:** equipo.intiai@gmail.com
